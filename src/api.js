@@ -38,3 +38,31 @@ export const fetchDetails = async (id) => {
         return null;
     }
 };
+
+export const fetchCast = async (id) => {
+    if (!id) {
+        console.error("Error: No movie ID provided");
+        return null;
+    }
+    try {
+        const response = await axios.get(`${BASE_URL}/movie/${id}/credits`, options);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching movie details:", error.response?.data || error.message);
+        return null;
+    }
+};
+
+export const fetchReviews = async (id) => {
+    if (!id) {
+        console.error("Error: No movie ID provided");
+        return null;
+    }
+    try {
+        const response = await axios.get(`${BASE_URL}/movie/${id}/reviews`, options);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching movie details:", error.response?.data || error.message);
+        return null;
+    }
+};

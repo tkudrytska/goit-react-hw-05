@@ -1,13 +1,10 @@
 import s from "./MovieDetailsPage.module.css"
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Link, Outlet, useLocation, useParams } from "react-router-dom"
 import { fetchDetails } from "../../api.js";
 
 const MovieDetailsPage = () => {
     const { id } = useParams();
-
-console.log(fetchDetails(id).then(data => console.log(data)));
-
     const location = useLocation();
     const [movie, setMovie] = useState({});
     const [loading, setLoading] = useState(false);
@@ -37,9 +34,6 @@ console.log(fetchDetails(id).then(data => console.log(data)));
         return <p>Loading...</p>;
     }
 
-    console.log(movie);
-    
-
     if (!movie) {
         return <p>Movie details not found</p>;
     }
@@ -47,9 +41,9 @@ console.log(fetchDetails(id).then(data => console.log(data)));
     return (
         <main>
             {loading && <p>Loading...</p>}
-            <Link to={backLinkHref}>Back to products</Link>
-            <section>
-                <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt="movie.original_title" />
+            <Link to={backLinkHref}>Go back</Link>
+            <section className={s.info}>
+                <img className={s.img} src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt="movie.original_title" />
                 <div>
                     <h2>{movie.original_title}</h2>
                     <p>User score: {movie.vote_average}</p>
@@ -59,11 +53,14 @@ console.log(fetchDetails(id).then(data => console.log(data)));
                     <p>{movie.genres?.map((genre) => genre.name).join(", ") || "No genres available"}</p>
                 </div>
             </section>
-            <section>
-                <Link></Link>
-                <Link></Link>
+            <section className={s.container}>
+                <h2>Additional information</h2>
+                <Link to="cast">Cast</Link>
+                <Link to="reviews">Reviews</Link>
             </section>
-                <Outlet/>
+            <Suspense>
+                <Outlet />
+            </Suspense>
         </main>
     )
 }
