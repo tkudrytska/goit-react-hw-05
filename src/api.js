@@ -66,3 +66,25 @@ export const fetchReviews = async (id) => {
         return null;
     }
 };
+
+export const fetchSearchMovies = async (query) => {
+    if (!query) {
+        console.error("Error: No search query provided");
+        return null;
+    }
+    try {
+        const response = await axios.get(`${BASE_URL}/search/movie`, {
+            ...options,
+            params: {
+                ...options.params,
+                query: query,
+                include_adult: false,
+                page: 1,
+            }
+        });
+        return response.data.results;
+    } catch (error) {
+        console.error("Error fetching search movies:", error.response?.data || error.message);
+        return null;
+    }
+};
