@@ -1,11 +1,13 @@
 import s from "./MovieDetailsPage.module.css"
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { Link, Outlet, useLocation, useParams } from "react-router-dom"
 import { fetchDetails } from "../../api.js";
 
 const MovieDetailsPage = () => {
     const { id } = useParams();
     const location = useLocation();
+    const backLinkHref = useRef(location.state ?? '/movies');
+
     const [movie, setMovie] = useState({});
     const [loading, setLoading] = useState(false);
     useEffect(() => {
@@ -28,13 +30,11 @@ const MovieDetailsPage = () => {
         fetchMovie();
     }, [id]);
 
-    const backLinkHref = location.state ?? '/movies';
-
     if (loading) {
         return <p>Loading...</p>;
     }
 
-    if (!movie) {
+    if (!movie || Object.keys(movie).length === 0) {
         return <p>Movie details not found</p>;
     }
 
@@ -43,7 +43,7 @@ const MovieDetailsPage = () => {
             {loading && <p>Loading...</p>}
             <Link to={backLinkHref}>Go back</Link>
             <section className={s.info}>
-                <img className={s.img} src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt="movie.original_title" />
+                <img className={s.img} src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt={movie.original_title} />
                 <div>
                     <h2>{movie.original_title}</h2>
                     <p>User score: {movie.vote_average}</p>
