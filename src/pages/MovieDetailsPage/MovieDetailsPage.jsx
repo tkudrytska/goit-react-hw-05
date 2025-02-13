@@ -41,7 +41,7 @@ const MovieDetailsPage = () => {
     return (
         <main>
             {loading && <p>Loading...</p>}
-            <Link to={backLinkHref}>Go back</Link>
+            <Link to={backLinkHref.current}>Go back</Link>
             <section className={s.info}>
                 <img className={s.img} src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt={movie.original_title} />
                 <div>
